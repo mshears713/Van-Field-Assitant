@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime files — keep structure but not content
+logs/agent_calls.jsonl
+logs/events.jsonl
+logs/preflight.jsonl
+
+# Model files (large, not tracked)
+*.gguf
+*.bin
+*.safetensors
+
+# Keep .gitkeep files in empty dirs
+!**/.gitkeep
