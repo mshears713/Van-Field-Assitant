@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/settings")
-async def get_settings() -> dict:
+def get_settings() -> dict:
     return {
         "ok": True,
         "implemented": False,

@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/network/status")
-async def get_network_status() -> dict:
+def get_network_status() -> dict:
     return {
         "ok": True,
         "implemented": False,

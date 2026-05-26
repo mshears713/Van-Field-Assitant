@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/projects")
-async def get_projects() -> dict:
+def get_projects() -> dict:
     return {
         "ok": True,
         "implemented": False,

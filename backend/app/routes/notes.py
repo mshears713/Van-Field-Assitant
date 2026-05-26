@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/notes")
-async def get_notes() -> dict:
+def get_notes() -> dict:
     return {
         "ok": True,
         "implemented": False,

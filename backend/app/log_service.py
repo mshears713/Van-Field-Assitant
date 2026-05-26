@@ -68,13 +68,14 @@ def read_recent_logs(logs_dir: Path, limit: int = 50) -> list:
         if not path.exists():
             continue
         try:
-            for line in path.read_text(encoding="utf-8").splitlines():
-                line = line.strip()
-                if line:
-                    try:
-                        records.append(json.loads(line))
-                    except json.JSONDecodeError:
-                        pass
+            with path.open("r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            records.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
         except OSError:
             pass
     records.sort(key=lambda r: r.get("timestamp", ""), reverse=True)

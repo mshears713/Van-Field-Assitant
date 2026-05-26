@@ -93,7 +93,7 @@ async function loadHome() {
 
     const paths = d.paths || {};
     const pathsHtml = Object.entries(paths)
-      .map(([k, v]) => `<div><span style="color:var(--text-muted)">${k}:</span> ${v}</div>`)
+      .map(([k, v]) => '<div><span style="color:var(--text-muted)">' + escHtml(k) + ':</span> ' + escHtml(v) + '</div>')
       .join('');
     setHtml('status-paths', pathsHtml || '—');
 
@@ -210,11 +210,31 @@ function clearAgentPanel() {
 function copyResponse() {
   const text = el('response-area').textContent;
   if (!text || text === 'Response will appear here.') return;
-  navigator.clipboard.writeText(text).then(() => {
-    const c = el('copy-confirm');
-    c.classList.add('show');
-    setTimeout(() => c.classList.remove('show'), 2000);
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showCopyConfirm);
+  } else {
+    // Fallback for non-secure contexts (plain HTTP on Android LAN)
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showCopyConfirm();
+    } catch (err) {
+      alert('Auto-copy not supported here. Please long-press and copy the text manually.');
+    }
+    document.body.removeChild(ta);
+  }
+}
+
+function showCopyConfirm() {
+  const c = el('copy-confirm');
+  c.classList.add('show');
+  setTimeout(() => c.classList.remove('show'), 2000);
 }
 
 // ── Projects ─────────────────────────────────────────────────────────────────
@@ -249,9 +269,9 @@ async function loadNotes() {
     const pathKeys = ['inbox', 'processed', 'ready_for_notion', 'archived'];
     const html = pathKeys
       .filter(k => d[k])
-      .map(k => `<div><span style="color:var(--text-muted)">${k}:</span> ${d[k]}</div>`)
+      .map(k => '<div><span style="color:var(--text-muted)">' + escHtml(k) + ':</span> ' + escHtml(d[k]) + '</div>')
       .join('');
-    el('notes-paths').innerHTML = html || d.notes_dir || '—';
+    el('notes-paths').innerHTML = html || escHtml(d.notes_dir) || '—';
   } catch (err) {
     el('notes-paths').textContent = 'Could not load: ' + err;
   }

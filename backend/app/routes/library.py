@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/library")
-async def get_library() -> dict:
+def get_library() -> dict:
     index_path = config.LIBRARY_DIR / "index.json"
     return {
         "ok": True,
