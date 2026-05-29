@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1117">
+  <title>Field Assistant</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<div id="app-header">
+  <h1>⚡ Offline Field Assistant</h1>
+</div>
+
+<nav id="nav">
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('home')">Home</div>
+    <div class="nav-tab" onclick="showTab('agents')">Agents</div>
+    <div class="nav-tab" onclick="showTab('projects')">Projects</div>
+    <div class="nav-tab" onclick="showTab('library')">Library</div>
+    <div class="nav-tab" onclick="showTab('notes')">Notes</div>
+    <div class="nav-tab" onclick="showTab('audio')">Audio</div>
+    <div class="nav-tab" onclick="showTab('network')">Network</div>
+    <div class="nav-tab" onclick="showTab('logs')">Logs</div>
+    <div class="nav-tab" onclick="showTab('settings')">Settings</div>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<section id="tab-home" class="section active">
+  <div class="section-header">
+    <h2>System Status</h2>
+    <span class="badge live">Live</span>
+  </div>
+
+  <div id="home-loading" class="loading-text">
+    <span class="loading-spinner"></span>Loading status...
+  </div>
+
+  <div id="home-content" style="display:none">
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-title">Backend</div>
+        <div class="card-value" id="status-backend">—</div>
+        <div class="card-sub" id="status-version">—</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Ollama</div>
+        <div class="card-value" id="status-ollama">—</div>
+        <div class="card-sub" id="status-model">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Local Time</div>
+      <div class="card-value" id="status-time">—</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Dashboard URL</div>
+      <div class="card-value" id="status-url" style="font-size:13px;font-family:monospace">—</div>
+      <div class="card-sub">Open this address from Android phone browser</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Paths</div>
+      <div id="status-paths" style="font-size:12px;font-family:monospace;color:var(--text-dim)">—</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Last Event</div>
+      <div class="card-value" id="status-last-event" style="font-size:13px">—</div>
+    </div>
+  </div>
+
+  <div id="home-error" class="info-box warning" style="display:none">
+    <h3>Could not load status</h3>
+    <p id="home-error-msg">Unknown error.</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary btn-sm" onclick="loadHome()">↻ Refresh</button>
+    <a class="btn btn-secondary btn-sm" href="/api/status" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ AGENTS ══════════════ -->
+<section id="tab-agents" class="section">
+  <div class="section-header">
+    <h2>Local Agents</h2>
+    <span class="badge live">Live</span>
+  </div>
+
+  <div class="form-group">
+    <label for="agent-select">Agent Role</label>
+    <select id="agent-select" onchange="onAgentChange()">
+      <option value="">Loading agents...</option>
+    </select>
+  </div>
+
+  <div class="agent-description" id="agent-description">Select an agent to see its description.</div>
+
+  <div class="form-group">
+    <label for="agent-message">Message</label>
+    <textarea id="agent-message" rows="4" placeholder="Ask the agent something..."></textarea>
+  </div>
+
+  <details style="margin-bottom:14px">
+    <summary style="font-size:13px;color:var(--text-dim);cursor:pointer;padding:4px 0">
+      + Optional context (paste logs, code, status, etc.)
+    </summary>
+    <div class="form-group" style="margin-top:10px">
+      <label for="agent-context">Context</label>
+      <textarea id="agent-context" rows="5" placeholder="Paste relevant logs, error output, code snippets, or status JSON here..."></textarea>
+    </div>
+  </details>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">Send</button>
+    <button class="btn btn-secondary" onclick="clearAgentPanel()">Clear</button>
+  </div>
+
+  <div id="agent-loading" style="display:none;margin-top:14px" class="loading-text">
+    <span class="loading-spinner"></span>Waiting for Ollama response...
+  </div>
+
+  <div id="response-area" class="empty">Response will appear here.</div>
+
+  <div id="recovery-hint-box" class="recovery-hint" style="display:none"></div>
+
+  <div class="elapsed" id="elapsed-time" style="display:none"></div>
+
+  <div class="btn-row" id="copy-row" style="display:none;margin-top:6px">
+    <button class="btn btn-secondary btn-sm" onclick="copyResponse()">Copy Response</button>
+    <span id="copy-confirm">Copied!</span>
+  </div>
+</section>
+
+<!-- ══════════════ PROJECTS ══════════════ -->
+<section id="tab-projects" class="section">
+  <div class="section-header">
+    <h2>Projects</h2>
+    <span class="badge scaffold">Scaffold</span>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Not fully implemented yet</h3>
+    <p>Project workspace browsing is scaffolded. Full repo management is coming in a future version.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Workspace Directory</div>
+    <div class="path-display" id="projects-workspace-dir">Loading...</div>
+    <div class="card-sub">Clone public repos here using: <code>git clone &lt;url&gt;</code></div>
+  </div>
+
+  <div class="info-box">
+    <h3>Planned features</h3>
+    <ul>
+      <li>List cloned repos in workspace/repos/</li>
+      <li>Show README and recent commits per repo</li>
+      <li>Ask Coder Agent about a specific repo</li>
+      <li>Clone public repos during Internet Sync mode (no private credentials)</li>
+      <li>Run project startup scripts safely</li>
+    </ul>
+  </div>
+
+  <div id="projects-items" style="margin-top:8px"></div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary btn-sm" href="/api/projects" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ LIBRARY ══════════════ -->
+<section id="tab-library" class="section">
+  <div class="section-header">
+    <h2>Library</h2>
+    <span class="badge scaffold">Scaffold</span>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Not fully implemented yet</h3>
+    <p>Local Notion export library browsing is scaffolded. Index building is coming in a future version.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Library Directory</div>
+    <div class="path-display" id="library-dir">Loading...</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Notion Exports Folder</div>
+    <div class="path-display" id="library-exports-dir">Loading...</div>
+    <div class="card-sub">Copy exported Markdown/HTML from your trusted machine into this folder</div>
+  </div>
+
+  <div class="info-box">
+    <h3>How to populate the library</h3>
+    <ul>
+      <li><strong>[Trusted machine]</strong> Export Notion pages as Markdown or HTML</li>
+      <li><strong>[Copy to mini PC]</strong> Transfer via USB drive or LAN into <code>library/notion_exports/</code></li>
+      <li><strong>[Mini PC — future]</strong> Run the index builder script to generate <code>library/index.json</code></li>
+      <li><strong>No Notion login or API key is ever stored on this machine</strong></li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <h3>Planned features</h3>
+    <ul>
+      <li>Auto-index Notion export folder</li>
+      <li>Search local library by title/tags</li>
+      <li>Ask Librarian Agent about local content</li>
+      <li>Suggest reading paths from local index</li>
+    </ul>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary btn-sm" href="/api/library" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ NOTES ══════════════ -->
+<section id="tab-notes" class="section">
+  <div class="section-header">
+    <h2>Notes</h2>
+    <span class="badge scaffold">Scaffold</span>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Not fully implemented yet</h3>
+    <p>Notes folder structure is ready. Note creation and the audio pipeline are coming in a future version.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Notes Pipeline</div>
+    <ul class="checklist">
+      <li>Record voice note on Android phone</li>
+      <li>Upload audio file to dashboard (Audio tab — coming soon)</li>
+      <li>Transcribe locally with Whisper (coming soon)</li>
+      <li>Classify with Capture Agent (available now in Agents tab)</li>
+      <li>Save structured note to notes/inbox/</li>
+      <li>Review and move to notes/processed/ or notes/ready_for_notion/</li>
+      <li>Copy to trusted machine for final Notion import</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Note Folders</div>
+    <div id="notes-paths" style="font-size:12px;font-family:monospace;color:var(--text-dim);line-height:2">
+      Loading...
+    </div>
+  </div>
+
+  <div id="notes-items" style="margin-top:8px"></div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary btn-sm" href="/api/notes" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ AUDIO ══════════════ -->
+<section id="tab-audio" class="section">
+  <div class="section-header">
+    <h2>Audio Upload</h2>
+    <span class="badge" style="background:rgba(231,76,60,0.15);color:var(--red)">Not Built</span>
+  </div>
+
+  <div class="info-box not-implemented">
+    <h3>Audio upload is not implemented yet</h3>
+    <p>This feature requires HTTPS for browser microphone access and a local Whisper installation for transcription. Both are planned for a future version.</p>
+  </div>
+
+  <div class="info-box">
+    <h3>Planned audio flow</h3>
+    <ul>
+      <li>Record voice note on Android phone (using the phone's own voice recorder)</li>
+      <li>Upload the audio file here to the dashboard</li>
+      <li>Backend saves raw audio to <code>notes/inbox/</code></li>
+      <li>Local Whisper transcribes the audio (CPU-only, small model)</li>
+      <li>Raw transcript is preserved alongside original audio</li>
+      <li>Capture Agent classifies the transcript into a structured note</li>
+      <li>User reviews and promotes note to <code>notes/ready_for_notion/</code></li>
+    </ul>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Current workaround</h3>
+    <p>Use the Agents tab → Capture Agent. Paste your raw voice transcript or notes manually and the Capture Agent will classify and structure them for you.</p>
+  </div>
+</section>
+
+<!-- ══════════════ NETWORK ══════════════ -->
+<section id="tab-network" class="section">
+  <div class="section-header">
+    <h2>Network</h2>
+    <span class="badge scaffold">Manual only</span>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Network switching is manual</h3>
+    <p>Automated Wi-Fi mode switching is not implemented. Use the checklist below for manual setup. <strong>Warning: switching Wi-Fi on the mini PC will disconnect this dashboard.</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Backend Address</div>
+    <div class="card-value" id="network-host" style="font-family:monospace;font-size:14px">—</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Android Access URL</div>
+    <div class="card-value" id="network-url" style="font-family:monospace;font-size:13px">—</div>
+    <div class="card-sub">Replace &lt;mini-pc-ip&gt; with the actual IP address</div>
+  </div>
+
+  <div class="info-box">
+    <h3>Access from Android phone</h3>
+    <ul class="checklist">
+      <li>Android phone and mini PC must be on the same Wi-Fi network</li>
+      <li>Find mini PC IP: open a terminal and run <code>ipconfig | findstr IPv4</code></li>
+      <li>Open <code>http://&lt;mini-pc-ip&gt;:8080</code> in Android browser</li>
+      <li>If it does not load, check Windows Firewall (see below)</li>
+    </ul>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Windows Firewall</h3>
+    <p>Windows Firewall may block port 8080. Run this command in a terminal as administrator:</p>
+    <p><code>netsh advfirewall firewall add rule name="FieldAssistant" dir=in action=allow protocol=TCP localport=8080</code></p>
+  </div>
+
+  <div class="info-box">
+    <h3>Network modes (manual)</h3>
+    <p><strong>Local Field Mode:</strong> Mini PC creates its own Wi-Fi (e.g., FieldAssistantNet). Android connects to it. No internet access.</p>
+    <p style="margin-top:8px"><strong>Internet Sync Mode:</strong> Mini PC connects to iPhone hotspot temporarily to pull repos or models. The Android dashboard will disconnect during this switch. Reconnect after sync is done.</p>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary btn-sm" href="/api/network/status" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ LOGS ══════════════ -->
+<section id="tab-logs" class="section">
+  <div class="section-header">
+    <h2>Recent Logs</h2>
+    <span class="badge live">Live</span>
+  </div>
+
+  <div id="logs-loading" class="loading-text" style="display:none">
+    <span class="loading-spinner"></span>Loading logs...
+  </div>
+
+  <div id="logs-empty" class="info-box" style="display:none">
+    <h3>No logs yet</h3>
+    <p>Log entries appear here after the backend starts and agent calls are made.</p>
+    <p>Log files: <code>logs/events.jsonl</code> and <code>logs/agent_calls.jsonl</code></p>
+  </div>
+
+  <div id="logs-list"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary btn-sm" onclick="loadLogs()">↻ Refresh</button>
+    <a class="btn btn-secondary btn-sm" href="/api/logs/recent" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<!-- ══════════════ SETTINGS ══════════════ -->
+<section id="tab-settings" class="section">
+  <div class="section-header">
+    <h2>Settings</h2>
+    <span class="badge scaffold">Read-only</span>
+  </div>
+
+  <div class="info-box warning">
+    <h3>Read-only in this version</h3>
+    <p>To change settings, set environment variables before starting the backend. See the env_vars section below or the RUNBOOK.md for details.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Current Configuration</div>
+    <table class="settings-table" id="settings-table">
+      <tr><td colspan="2" style="color:var(--text-muted)">Loading...</td></tr>
+    </table>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn btn-secondary btn-sm" href="/api/settings" target="_blank">Raw JSON</a>
+  </div>
+</section>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
