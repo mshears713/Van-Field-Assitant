@@ -83,8 +83,15 @@ async function loadHome() {
     setHtml('status-backend', dotHtml(d.backend?.ok));
     setText('status-version', `v${d.backend?.version || '?'}`);
 
-    setHtml('status-ollama', dotHtml(d.ollama?.available));
-    setText('status-model', d.ollama?.default_model || '—');
+    // Fix 1: LLM backend card — mode-aware (OpenAI vs Ollama)
+    const llm = d.llm_backend;
+    if (llm && llm.mode === 'openai') {
+      setHtml('status-ollama', `<span class="status-dot dot-green"></span>OpenAI`);
+      setText('status-model', llm.model || '—');
+    } else {
+      setHtml('status-ollama', dotHtml(d.ollama?.available));
+      setText('status-model', (llm?.model || d.ollama?.default_model || '—'));
+    }
 
     const t = d.backend?.local_time ? new Date(d.backend.local_time).toLocaleString() : '—';
     setText('status-time', t);
@@ -150,6 +157,9 @@ async function sendMessage() {
   ra.className = 'empty';
   ra.textContent = '';
 
+  // Fix 5: scroll response area into view so user knows to look there
+  ra.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
   try {
     const body = { message };
     if (context) body.context = context;
@@ -179,6 +189,10 @@ async function sendMessage() {
         show('elapsed-time');
       }
     }
+
+    // Fix 5: scroll again after content is rendered
+    ra.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
   } catch (err) {
     hide('agent-loading');
     el('send-btn').disabled = false;
@@ -239,25 +253,77 @@ function showCopyConfirm() {
 
 // ── Projects ─────────────────────────────────────────────────────────────────
 
+// Fix 2: always re-fetches on tab switch, shows clear error on failure
 async function loadProjects() {
+  const dirEl = el('projects-workspace-dir');
+  const errEl = el('projects-dir-error');
+  dirEl.textContent = 'Loading...';
+  if (errEl) errEl.style.display = 'none';
   try {
     const d = await apiFetch('/api/projects');
-    el('projects-workspace-dir').textContent = d.workspace_dir || '—';
+    dirEl.textContent = d.workspace_dir || '—';
   } catch (err) {
-    el('projects-workspace-dir').textContent = 'Could not load: ' + err;
+    dirEl.textContent = '—';
+    if (errEl) {
+      errEl.textContent = 'Could not load path: ' + err;
+      errEl.style.display = '';
+    }
   }
 }
 
 // ── Library ──────────────────────────────────────────────────────────────────
 
 async function loadLibrary() {
+  const badge = el('library-badge');
   try {
     const d = await apiFetch('/api/library');
-    el('library-dir').textContent = d.library_dir || '—';
-    el('library-exports-dir').textContent = d.notion_exports_dir || '—';
+    const items = d.items || [];
+    const hasItems = items.length > 0;
+
+    badge.textContent = hasItems ? 'Live' : 'Empty';
+    badge.className = 'badge ' + (hasItems ? 'live' : 'scaffold');
+
+    if (!hasItems) {
+      show('library-empty-hint');
+      hide('library-summary');
+      hide('library-how-to');
+      hide('library-items-list');
+      return;
+    }
+
+    hide('library-empty-hint');
+    show('library-summary');
+    show('library-how-to');
+    show('library-items-list');
+
+    setText('library-item-count', `${items.length} pages indexed`);
+    setText('library-exports-dir', d.notion_exports_dir || '—');
+
+    // Group by section
+    const sections = {};
+    for (const item of items) {
+      const sec = item.section || 'Other';
+      if (!sections[sec]) sections[sec] = [];
+      sections[sec].push(item);
+    }
+
+    const html = Object.entries(sections).map(([sec, pages]) => `
+      <div class="library-section-header">${escHtml(sec)}</div>
+      ${pages.map(p => `
+        <div class="library-item">
+          <div class="library-item-title">${escHtml(p.title)}</div>
+          ${p.tags.length ? `<div class="library-item-tags">${p.tags.map(t => `<span class="lib-tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
+          ${p.local_agent_use ? `<div class="library-item-use">${escHtml(p.local_agent_use)}</div>` : ''}
+        </div>
+      `).join('')}
+    `).join('');
+
+    el('library-items-list').innerHTML = html;
+
   } catch (err) {
-    el('library-dir').textContent = 'Could not load: ' + err;
-    el('library-exports-dir').textContent = '—';
+    badge.textContent = 'Error';
+    badge.className = 'badge scaffold';
+    el('library-items-list').innerHTML = `<div class="info-box warning"><p>Could not load library: ${escHtml(String(err))}</p></div>`;
   }
 }
 
@@ -279,11 +345,26 @@ async function loadNotes() {
 
 // ── Network ──────────────────────────────────────────────────────────────────
 
+// Fix 3: show localhost for local access; show real LAN IP for Android URL
 async function loadNetwork() {
   try {
     const d = await apiFetch('/api/network/status');
-    el('network-host').textContent = `${d.host || '0.0.0.0'}:${d.port || 8080}`;
-    el('network-url').textContent = d.dashboard_url_hint || '—';
+    const localHost = (d.host === '0.0.0.0' || !d.host) ? 'localhost' : d.host;
+    el('network-host').textContent = `${localHost}:${d.port || 8080}`;
+
+    const urlEl = el('network-url');
+    const subEl = el('network-url-sub');
+    const hint = d.dashboard_url_hint || '—';
+    urlEl.textContent = hint;
+
+    // If LAN IP was detected, remove the placeholder hint
+    if (subEl) {
+      if (d.lan_ip && !d.lan_ip.startsWith('<')) {
+        subEl.textContent = 'Auto-detected LAN address — use this on your Android phone';
+      } else {
+        subEl.textContent = 'Run: ipconfig | findstr IPv4 — then replace <mini-pc-ip>';
+      }
+    }
   } catch (err) {
     el('network-host').textContent = 'Could not load.';
     el('network-url').textContent = '—';
@@ -316,8 +397,6 @@ function renderLogEntry(entry) {
 
   // Agent call entry
   if (entry.agent_id) {
-    const status = entry.ok ? 'ok' : 'fail';
-    const typeLabel = entry.ok ? 'agent-ok' : 'agent-fail';
     const msg = entry.ok
       ? `${entry.agent_id} → ${entry.model} (${entry.elapsed_ms}ms)`
       : `${entry.agent_id} failed: ${entry.error || '?'}`;

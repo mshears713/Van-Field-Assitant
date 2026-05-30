@@ -11,7 +11,8 @@ def test_config_loads():
     from backend.app.config import config
     assert config.APP_NAME == "Offline Field Assistant"
     assert config.PORT == 8080
-    assert config.DEFAULT_MODEL == "qwen2.5-coder:3b"
+    assert config.DEFAULT_MODEL == "qwen3:4b"
+    assert config.CODER_MODEL == "qwen2.5-coder:3b"
     assert config.FALLBACK_MODEL == "qwen2.5-coder:1.5b"
     assert "localhost:11434" in config.OLLAMA_BASE_URL
 

@@ -42,7 +42,9 @@ def test_status_ollama_available_is_bool(client, monkeypatch):
 
 
 def test_status_ollama_available_true_when_online(client, monkeypatch):
+    from backend.app.config import config as app_config
     monkeypatch.setattr("backend.app.routes.status.check_availability", AsyncMock(return_value=True))
+    monkeypatch.setattr(app_config, "OPENAI_API_KEY", "")  # force Ollama mode
     data = client.get("/api/status").json()
     assert data["ollama"]["available"] is True
 

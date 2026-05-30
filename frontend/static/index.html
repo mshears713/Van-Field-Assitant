@@ -45,8 +45,9 @@
         <div class="card-value" id="status-backend">—</div>
         <div class="card-sub" id="status-version">—</div>
       </div>
+      <!-- Fix 1: renamed from "Ollama" to "LLM Backend", mode-aware -->
       <div class="card">
-        <div class="card-title">Ollama</div>
+        <div class="card-title">LLM Backend</div>
         <div class="card-value" id="status-ollama">—</div>
         <div class="card-sub" id="status-model">—</div>
       </div>
@@ -92,11 +93,14 @@
     <span class="badge live">Live</span>
   </div>
 
+  <!-- Fix 4: select wrapped in .select-wrapper for custom arrow styling -->
   <div class="form-group">
     <label for="agent-select">Agent Role</label>
-    <select id="agent-select" onchange="onAgentChange()">
-      <option value="">Loading agents...</option>
-    </select>
+    <div class="select-wrapper">
+      <select id="agent-select" onchange="onAgentChange()">
+        <option value="">Loading agents...</option>
+      </select>
+    </div>
   </div>
 
   <div class="agent-description" id="agent-description">Select an agent to see its description.</div>
@@ -122,7 +126,7 @@
   </div>
 
   <div id="agent-loading" style="display:none;margin-top:14px" class="loading-text">
-    <span class="loading-spinner"></span>Waiting for Ollama response...
+    <span class="loading-spinner"></span>Waiting for model response...
   </div>
 
   <div id="response-area" class="empty">Response will appear here.</div>
@@ -149,9 +153,11 @@
     <p>Project workspace browsing is scaffolded. Full repo management is coming in a future version.</p>
   </div>
 
+  <!-- Fix 2: added refresh button + error div for projects -->
   <div class="card">
     <div class="card-title">Workspace Directory</div>
     <div class="path-display" id="projects-workspace-dir">Loading...</div>
+    <div id="projects-dir-error" style="display:none;font-size:12px;color:var(--red);margin-top:4px"></div>
     <div class="card-sub">Clone public repos here using: <code>git clone &lt;url&gt;</code></div>
   </div>
 
@@ -169,6 +175,7 @@
   <div id="projects-items" style="margin-top:8px"></div>
 
   <div class="btn-row">
+    <button class="btn btn-secondary btn-sm" onclick="loadProjects()">↻ Refresh</button>
     <a class="btn btn-secondary btn-sm" href="/api/projects" target="_blank">Raw JSON</a>
   </div>
 </section>
@@ -177,45 +184,34 @@
 <section id="tab-library" class="section">
   <div class="section-header">
     <h2>Library</h2>
-    <span class="badge scaffold">Scaffold</span>
+    <span class="badge" id="library-badge">Loading</span>
   </div>
 
-  <div class="info-box warning">
-    <h3>Not fully implemented yet</h3>
-    <p>Local Notion export library browsing is scaffolded. Index building is coming in a future version.</p>
+  <div id="library-empty-hint" class="info-box warning" style="display:none">
+    <h3>No library content yet</h3>
+    <p>Copy Notion exports (Markdown/HTML) into <code>library/notion_exports/</code> and refresh.</p>
   </div>
 
-  <div class="card">
-    <div class="card-title">Library Directory</div>
-    <div class="path-display" id="library-dir">Loading...</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Notion Exports Folder</div>
-    <div class="path-display" id="library-exports-dir">Loading...</div>
-    <div class="card-sub">Copy exported Markdown/HTML from your trusted machine into this folder</div>
+  <div id="library-summary" class="card" style="display:none">
+    <div class="card-title">Library Index</div>
+    <div class="card-value" id="library-item-count">—</div>
+    <div class="card-sub" id="library-exports-dir">—</div>
   </div>
 
-  <div class="info-box">
-    <h3>How to populate the library</h3>
+  <div id="library-how-to" class="info-box" style="display:none">
+    <h3>How to use with Librarian Agent</h3>
     <ul>
-      <li><strong>[Trusted machine]</strong> Export Notion pages as Markdown or HTML</li>
-      <li><strong>[Copy to mini PC]</strong> Transfer via USB drive or LAN into <code>library/notion_exports/</code></li>
-      <li><strong>[Mini PC — future]</strong> Run the index builder script to generate <code>library/index.json</code></li>
-      <li><strong>No Notion login or API key is ever stored on this machine</strong></li>
+      <li>Find a page below, note its title</li>
+      <li>Go to <strong>Agents → Librarian</strong></li>
+      <li>Ask any question — pages are retrieved automatically</li>
+      <li>Paste page content into the context box for extra precision</li>
     </ul>
   </div>
 
-  <div class="info-box">
-    <h3>Planned features</h3>
-    <ul>
-      <li>Auto-index Notion export folder</li>
-      <li>Search local library by title/tags</li>
-      <li>Ask Librarian Agent about local content</li>
-      <li>Suggest reading paths from local index</li>
-    </ul>
-  </div>
+  <div id="library-items-list" style="margin-top:4px"></div>
 
   <div class="btn-row">
+    <button class="btn btn-secondary btn-sm" onclick="loadLibrary()">↻ Refresh</button>
     <a class="btn btn-secondary btn-sm" href="/api/library" target="_blank">Raw JSON</a>
   </div>
 </section>
@@ -302,23 +298,23 @@
     <p>Automated Wi-Fi mode switching is not implemented. Use the checklist below for manual setup. <strong>Warning: switching Wi-Fi on the mini PC will disconnect this dashboard.</strong></p>
   </div>
 
+  <!-- Fix 3: show localhost for local access, real LAN IP for Android -->
   <div class="card">
-    <div class="card-title">Backend Address</div>
+    <div class="card-title">Local Access (this machine)</div>
     <div class="card-value" id="network-host" style="font-family:monospace;font-size:14px">—</div>
   </div>
 
   <div class="card">
     <div class="card-title">Android Access URL</div>
     <div class="card-value" id="network-url" style="font-family:monospace;font-size:13px">—</div>
-    <div class="card-sub">Replace &lt;mini-pc-ip&gt; with the actual IP address</div>
+    <div class="card-sub" id="network-url-sub">Use this address on your Android phone (same Wi-Fi)</div>
   </div>
 
   <div class="info-box">
     <h3>Access from Android phone</h3>
     <ul class="checklist">
       <li>Android phone and mini PC must be on the same Wi-Fi network</li>
-      <li>Find mini PC IP: open a terminal and run <code>ipconfig | findstr IPv4</code></li>
-      <li>Open <code>http://&lt;mini-pc-ip&gt;:8080</code> in Android browser</li>
+      <li>Use the Android Access URL shown above in your phone's browser</li>
       <li>If it does not load, check Windows Firewall (see below)</li>
     </ul>
   </div>
@@ -336,6 +332,7 @@
   </div>
 
   <div class="btn-row">
+    <button class="btn btn-secondary btn-sm" onclick="loadNetwork()">↻ Refresh</button>
     <a class="btn btn-secondary btn-sm" href="/api/network/status" target="_blank">Raw JSON</a>
   </div>
 </section>

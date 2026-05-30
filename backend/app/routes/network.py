@@ -1,3 +1,5 @@
+import socket
+
 from fastapi import APIRouter
 
 from ..config import config
@@ -5,8 +7,22 @@ from ..config import config
 router = APIRouter()
 
 
+def _get_lan_ip() -> str:
+    """Best-effort LAN IP detection. Falls back to placeholder on failure."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.settimeout(0.5)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "<mini-pc-ip>"
+
+
 @router.get("/network/status")
 def get_network_status() -> dict:
+    lan_ip = _get_lan_ip()
     return {
         "ok": True,
         "implemented": False,
@@ -17,7 +33,8 @@ def get_network_status() -> dict:
         "current_mode": "unknown",
         "host": config.HOST,
         "port": config.PORT,
-        "dashboard_url_hint": f"http://<mini-pc-ip>:{config.PORT}",
+        "lan_ip": lan_ip,
+        "dashboard_url_hint": f"http://{lan_ip}:{config.PORT}",
         "manual_checklist": [
             "Ensure Android phone and mini PC are on the same Wi-Fi network.",
             "Find mini PC IP: run 'ipconfig | findstr IPv4' in a Windows terminal.",

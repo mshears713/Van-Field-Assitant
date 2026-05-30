@@ -1,0 +1,31 @@
+INFO:     127.0.0.1:55621 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58061 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58061 - "GET /static/styles.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52486 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52486 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64637 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61064 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61064 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64637 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61821 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58268 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58268 - "GET /static/styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60712 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58268 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58268 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54729 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51661 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51661 - "GET /static/styles.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52595 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52595 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52595 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54322 - "GET /api/notes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54322 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58168 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51609 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61587 - "POST /api/agents/librarian/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65505 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53811 - "GET /api/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53510 - "POST /api/agents/librarian/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65530 - "GET /api/library HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52957 - "POST /api/agents/librarian/chat HTTP/1.1" 200 OK

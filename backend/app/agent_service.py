@@ -1,8 +1,10 @@
 from typing import Optional
 
 from .config import config
+from .library_service import build_librarian_context
 from .log_service import log_agent_call
-from .ollama_client import chat
+from .ollama_client import chat as ollama_chat
+from .openai_client import chat as openai_chat
 
 AGENT_METADATA: dict = {
     "operator": {
@@ -72,7 +74,24 @@ async def run_agent_chat(
             "error_type": "missing_prompt",
         }
 
-    effective_model = model or config.DEFAULT_MODEL
+    openai_mode = bool(config.OPENAI_API_KEY)
+    if openai_mode:
+        effective_model = model or config.OPENAI_MODEL
+    elif model:
+        effective_model = model
+    elif agent_id == "coder":
+        effective_model = config.CODER_MODEL
+    else:
+        effective_model = config.DEFAULT_MODEL
+
+    # Librarian: auto-retrieve index + matching pages from library
+    if agent_id == "librarian":
+        library_ctx = build_librarian_context(message)
+        if library_ctx:
+            if context and context.strip():
+                context = library_ctx + "\n\n## User-provided context:\n" + context.strip()
+            else:
+                context = library_ctx
 
     user_content = message
     if context and context.strip():
@@ -83,7 +102,10 @@ async def run_agent_chat(
         {"role": "user", "content": user_content},
     ]
 
-    result = await chat(config.OLLAMA_BASE_URL, effective_model, messages, config.OLLAMA_CHAT_TIMEOUT)
+    if openai_mode:
+        result = await openai_chat(config.OPENAI_API_KEY, effective_model, messages, config.OLLAMA_CHAT_TIMEOUT)
+    else:
+        result = await ollama_chat(config.OLLAMA_BASE_URL, effective_model, messages, config.OLLAMA_CHAT_TIMEOUT)
 
     log_id = log_agent_call(
         config.LOGS_DIR,
@@ -107,17 +129,27 @@ async def run_agent_chat(
             "elapsed_ms": result.elapsed_ms,
         }
 
-    recovery_hint = "Start Ollama and pull the configured model, then retry."
-    if result.error_type == "timeout":
-        recovery_hint = (
-            "Ollama is running but took too long. "
-            f"Try the fallback model ({config.FALLBACK_MODEL}) or a shorter prompt."
-        )
-    elif result.error_type == "http_error":
-        recovery_hint = (
-            "Ollama responded with an error. The model may not be pulled yet. "
-            f"Run: ollama pull {effective_model}"
-        )
+    if openai_mode:
+        recovery_hint = "Check your OPENAI_API_KEY in .env and ensure you have API access."
+        if result.error_type == "http_error":
+            recovery_hint = (
+                "OpenAI returned an error. Check your API key, quota, and that the model name is correct "
+                f"(currently: {effective_model})."
+            )
+        elif result.error_type == "timeout":
+            recovery_hint = "OpenAI took too long. Try a shorter prompt or check your connection."
+    else:
+        recovery_hint = "Start Ollama and pull the configured model, then retry."
+        if result.error_type == "timeout":
+            recovery_hint = (
+                "Ollama is running but took too long. "
+                f"Try the fallback model ({config.FALLBACK_MODEL}) or a shorter prompt."
+            )
+        elif result.error_type == "http_error":
+            recovery_hint = (
+                "Ollama responded with an error. The model may not be pulled yet. "
+                f"Run: ollama pull {effective_model}"
+            )
 
     return {
         "ok": False,

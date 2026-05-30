@@ -29,6 +29,9 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
+# Local secrets — never commit
+.env
+
 # Runtime files — keep structure but not content
 logs/agent_calls.jsonl
 logs/events.jsonl

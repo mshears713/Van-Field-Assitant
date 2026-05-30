@@ -1,6 +1,503 @@
 {
-  "version": "0.1.0",
-  "built_at": null,
-  "items": [],
-  "note": "This index is empty. Copy Notion exports into library/notion_exports/ then run the index builder (coming soon)."
+  "built_from": "notion_exports_scan",
+  "items": [
+    {
+      "title": "01 \u2014 Local LLM Harnesses: Big Picture",
+      "file": "01 \u2014 Local LLM Harnesses Big Picture cba4a4dacf2344808dac975b4ee16615.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\01 \u2014 Local LLM Harnesses Big Picture cba4a4dacf2344808dac975b4ee16615.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Top-level mental map of how a local model actually gets executed; lets the librarian explain why Ollama exists vs vLLM, llama.cpp, LM Studio, etc.",
+      "tags": [
+        "api",
+        "architecture",
+        "library",
+        "local-models",
+        "models",
+        "ollama",
+        "runtime"
+      ]
+    },
+    {
+      "title": "01 \u2014 Mini PC Hardware and Local Environment",
+      "file": "01 \u2014 Mini PC Hardware and Local Environment 19ea3eee1915427f8d36f06cfda1e5d2.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\01 \u2014 Mini PC Hardware and Local Environment 19ea3eee1915427f8d36f06cfda1e5d2.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Reference",
+      "local_agent_use": "Used by the librarian to know target hardware constraints (RAM, disk, CPU/GPU) when suggesting models or routes.",
+      "tags": [
+        "environment",
+        "hardware",
+        "mini-pc",
+        "runtime"
+      ]
+    },
+    {
+      "title": "02 \u2014 Ollama Runtime Overview",
+      "file": "02 \u2014 Ollama Runtime Overview 6ed79ca38ac447468f6258be0ce06ac9.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\02 \u2014 Ollama Runtime Overview 6ed79ca38ac447468f6258be0ce06ac9.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Tells the librarian how the local model server runs and how to reach it via HTTP.",
+      "tags": [
+        "api",
+        "embeddings",
+        "local-models",
+        "ollama",
+        "runtime",
+        "systemd"
+      ]
+    },
+    {
+      "title": "03 \u2014 Local Model Catalog (Small Models)",
+      "file": "03 \u2014 Local Model Catalog (Small Models) 6b3c0aa2a0114e1a86cb7378ce671066.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\03 \u2014 Local Model Catalog (Small Models) 6b3c0aa2a0114e1a86cb7378ce671066.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Reference",
+      "local_agent_use": "Lookup table the router uses to map task class to a specific local model variant.",
+      "tags": [
+        "embeddings",
+        "llama",
+        "local-models",
+        "mistral",
+        "models",
+        "ollama",
+        "phi",
+        "qwen"
+      ]
+    },
+    {
+      "title": "04 \u2014 FastAPI Service Layer",
+      "file": "04 \u2014 FastAPI Service Layer 3130756f1d76458c8fedef47fe9eb68e.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\04 \u2014 FastAPI Service Layer 3130756f1d76458c8fedef47fe9eb68e.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Defines the local HTTP surface the librarian and dashboard call into.",
+      "tags": [
+        "api",
+        "fastapi",
+        "python",
+        "service-layer"
+      ]
+    },
+    {
+      "title": "04 \u2014 Quantization and Why It Matters",
+      "file": "04 \u2014 Quantization and Why It Matters 0e9c1825a6fd4a9e9f7c65b967c88fb5.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\04 \u2014 Quantization and Why It Matters 0e9c1825a6fd4a9e9f7c65b967c88fb5.md",
+      "section": "Foundations and Runtime",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Lets the librarian explain quant tags (Q4_K_M, Q5_K_M, Q8_0), predict file size and RAM, and pick the right quant per task and hardware.",
+      "tags": [
+        "comparisons",
+        "experiments",
+        "local-models",
+        "models",
+        "ollama"
+      ]
+    },
+    {
+      "title": "05 \u2014 Python Environment and Dependencies",
+      "file": "05 \u2014 Python Environment and Dependencies 042983a486ae4be3819f133a7cd49107.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\05 \u2014 Python Environment and Dependencies 042983a486ae4be3819f133a7cd49107.md",
+      "section": "Foundations and Runtime",
+      "priority": "Medium",
+      "page_type": "Reference",
+      "local_agent_use": "Reproducibility info for rebuilds and Worker scripts.",
+      "tags": [
+        "dependencies",
+        "pip",
+        "python",
+        "uv",
+        "venv"
+      ]
+    },
+    {
+      "title": "06 \u2014 Process Management and Auto-Start",
+      "file": "06 \u2014 Process Management and Auto-Start 2cb9c4c14b7d42159ae77ae728378982.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\06 \u2014 Process Management and Auto-Start 2cb9c4c14b7d42159ae77ae728378982.md",
+      "section": "Foundations and Runtime",
+      "priority": "Medium",
+      "page_type": "Implementation",
+      "local_agent_use": "Lets the librarian reason about which services should be alive and how to recover.",
+      "tags": [
+        "autostart",
+        "services",
+        "supervisord",
+        "systemd"
+      ]
+    },
+    {
+      "title": "07 \u2014 Router Architecture Overview",
+      "file": "07 \u2014 Router Architecture Overview e316074c56764f97a487828996ea44ee.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\07 \u2014 Router Architecture Overview e316074c56764f97a487828996ea44ee.md",
+      "section": "Routing and Control",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Top-level decision flow the librarian itself participates in.",
+      "tags": [
+        "architecture",
+        "control",
+        "dispatch",
+        "router"
+      ]
+    },
+    {
+      "title": "08 \u2014 Model Selection Rules",
+      "file": "08 \u2014 Model Selection Rules 270389619bf64d7f9a8799114e0039b6.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\08 \u2014 Model Selection Rules 270389619bf64d7f9a8799114e0039b6.md",
+      "section": "Routing and Control",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Concrete heuristics the router applies to choose a model per task.",
+      "tags": [
+        "heuristics",
+        "model-selection",
+        "routing",
+        "rules"
+      ]
+    },
+    {
+      "title": "09 \u2014 Tool and Skill Registry",
+      "file": "09 \u2014 Tool and Skill Registry ecea263160124af394e2132c54e5dfb5.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\09 \u2014 Tool and Skill Registry ecea263160124af394e2132c54e5dfb5.md",
+      "section": "Routing and Control",
+      "priority": "High",
+      "page_type": "Reference",
+      "local_agent_use": "Authoritative list of callable skills and their I/O contracts.",
+      "tags": [
+        "contracts",
+        "registry",
+        "skills",
+        "tools"
+      ]
+    },
+    {
+      "title": "10 \u2014 Prompt and System Message Library",
+      "file": "10 \u2014 Prompt and System Message Library 85f572c07ac6425781574f666d14e5cc.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\10 \u2014 Prompt and System Message Library 85f572c07ac6425781574f666d14e5cc.md",
+      "section": "Routing and Control",
+      "priority": "Medium",
+      "page_type": "Reference",
+      "local_agent_use": "Source of system prompts the router and librarian use at runtime.",
+      "tags": [
+        "library",
+        "prompts",
+        "system-messages"
+      ]
+    },
+    {
+      "title": "11 \u2014 Fallback and Degraded Modes",
+      "file": "11 \u2014 Fallback and Degraded Modes bc491d672cfd4d9f8a6d3bf0d12a45b6.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\11 \u2014 Fallback and Degraded Modes bc491d672cfd4d9f8a6d3bf0d12a45b6.md",
+      "section": "Routing and Control",
+      "priority": "Medium",
+      "page_type": "Concept",
+      "local_agent_use": "Tells the router how to behave when a model is OOM, slow, or returns low confidence.",
+      "tags": [
+        "degraded-mode",
+        "fallback",
+        "resilience"
+      ]
+    },
+    {
+      "title": "12 \u2014 Git Safety and Repository Layout",
+      "file": "12 \u2014 Git Safety and Repository Layout 2da3d5dfbdd04ba2966a3fbaac478895.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\12 \u2014 Git Safety and Repository Layout 2da3d5dfbdd04ba2966a3fbaac478895.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Lets agents/Workers commit safely without trashing main.",
+      "tags": [
+        "branches",
+        "git",
+        "repo",
+        "safety"
+      ]
+    },
+    {
+      "title": "13 \u2014 Backups, Snapshots, and Rollback",
+      "file": "13 \u2014 Backups, Snapshots, and Rollback 25abe557277b4225b209b22ba5a82c4d.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\13 \u2014 Backups, Snapshots, and Rollback 25abe557277b4225b209b22ba5a82c4d.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "High",
+      "page_type": "Reference",
+      "local_agent_use": "Recovery playbook the librarian can cite during incidents.",
+      "tags": [
+        "backups",
+        "recovery",
+        "rollback",
+        "snapshots"
+      ]
+    },
+    {
+      "title": "14 \u2014 Dry Run and Human-in-the-Loop Patterns",
+      "file": "14 \u2014 Dry Run and Human-in-the-Loop Patterns 45181f7964d64a4e817523905af977a3.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\14 \u2014 Dry Run and Human-in-the-Loop Patterns 45181f7964d64a4e817523905af977a3.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Default policy for risky actions: preview before commit.",
+      "tags": [
+        "dry-run",
+        "guardrails",
+        "hitl",
+        "preview"
+      ]
+    },
+    {
+      "title": "15 \u2014 Local Testing Strategy",
+      "file": "15 \u2014 Local Testing Strategy 50a01a568ec84da69f619e3eb5d451b1.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\15 \u2014 Local Testing Strategy 50a01a568ec84da69f619e3eb5d451b1.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "Medium",
+      "page_type": "Implementation",
+      "local_agent_use": "How Workers should validate routing logic and skills before merge.",
+      "tags": [
+        "fastapi",
+        "fixtures",
+        "pytest",
+        "testing"
+      ]
+    },
+    {
+      "title": "16 \u2014 Observability and Local Logging",
+      "file": "16 \u2014 Observability and Local Logging 92390c9523334514a327213e6e7f5d49.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\16 \u2014 Observability and Local Logging 92390c9523334514a327213e6e7f5d49.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "Medium",
+      "page_type": "Implementation",
+      "local_agent_use": "Where the librarian looks to debug or summarize recent assistant behavior.",
+      "tags": [
+        "logging",
+        "metrics",
+        "observability",
+        "traces"
+      ]
+    },
+    {
+      "title": "17 \u2014 Failure Modes and Risk Register",
+      "file": "17 \u2014 Failure Modes and Risk Register a30942c2c94349aea858a5322d088718.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\17 \u2014 Failure Modes and Risk Register a30942c2c94349aea858a5322d088718.md",
+      "section": "Safety / Change Control / Testing",
+      "priority": "Medium",
+      "page_type": "Reference",
+      "local_agent_use": "Lookup of known failure modes and mitigations the librarian can quote.",
+      "tags": [
+        "failures",
+        "mitigations",
+        "register",
+        "risks"
+      ]
+    },
+    {
+      "title": "18 \u2014 Local File Search and Indexing",
+      "file": "18 \u2014 Local File Search and Indexing 24f4cacd6d664f428ab90f5a2f93e9f3.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\18 \u2014 Local File Search and Indexing 24f4cacd6d664f428ab90f5a2f93e9f3.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Primary retrieval surface the librarian uses to find relevant Markdown.",
+      "tags": [
+        "bm25",
+        "embeddings",
+        "indexing",
+        "rag",
+        "search"
+      ]
+    },
+    {
+      "title": "19 \u2014 Notion Export Pipeline",
+      "file": "19 \u2014 Notion Export Pipeline cbe92fcd72ef4e289c6ef7df03d66df5.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\19 \u2014 Notion Export Pipeline cbe92fcd72ef4e289c6ef7df03d66df5.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Defines how new versions of these pages flow into the offline library.",
+      "tags": [
+        "export",
+        "markdown",
+        "notion",
+        "pipeline"
+      ]
+    },
+    {
+      "title": "20 \u2014 Librarian Agent Design",
+      "file": "20 \u2014 Librarian Agent Design 75c20a39353d4184aec62ab53592b3c4.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\20 \u2014 Librarian Agent Design 75c20a39353d4184aec62ab53592b3c4.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Self-description of the librarian agent itself.",
+      "tags": [
+        "agent",
+        "classification",
+        "librarian",
+        "summarization"
+      ]
+    },
+    {
+      "title": "21 \u2014 Voice Notes Capture",
+      "file": "21 \u2014 Voice Notes Capture dcbd72f4ef48490b953c286beef22d77.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\21 \u2014 Voice Notes Capture dcbd72f4ef48490b953c286beef22d77.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "Medium",
+      "page_type": "Implementation",
+      "local_agent_use": "Inbound channel for ad-hoc voice input from phone or mic.",
+      "tags": [
+        "audio",
+        "capture",
+        "queue",
+        "voice-notes"
+      ]
+    },
+    {
+      "title": "22 \u2014 Speech-to-Text (Local STT)",
+      "file": "22 \u2014 Speech-to-Text (Local STT) 5e3507ad08864d25b04652a6853701ae.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\22 \u2014 Speech-to-Text (Local STT) 5e3507ad08864d25b04652a6853701ae.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "High",
+      "page_type": "Reference",
+      "local_agent_use": "Selected STT model and quality notes the router uses for voice intents.",
+      "tags": [
+        "local",
+        "stt",
+        "transcription",
+        "whisper"
+      ]
+    },
+    {
+      "title": "23 \u2014 Phone-Accessible Dashboard",
+      "file": "23 \u2014 Phone-Accessible Dashboard 8124766bbe764c6da364df6294f15fa0.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\23 \u2014 Phone-Accessible Dashboard 8124766bbe764c6da364df6294f15fa0.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "High",
+      "page_type": "Implementation",
+      "local_agent_use": "Primary human-facing surface for interacting with the assistant.",
+      "tags": [
+        "dashboard",
+        "lan",
+        "phone",
+        "ui"
+      ]
+    },
+    {
+      "title": "24 \u2014 Knowledge Library Structure on Disk",
+      "file": "24 \u2014 Knowledge Library Structure on Disk 8b699c46875e478c8d472ee1295c5b07.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\24 \u2014 Knowledge Library Structure on Disk 8b699c46875e478c8d472ee1295c5b07.md",
+      "section": "Knowledge / Speech / Interface",
+      "priority": "Medium",
+      "page_type": "Reference",
+      "local_agent_use": "Predictable file layout the librarian relies on for retrieval.",
+      "tags": [
+        "filesystem",
+        "layout",
+        "library",
+        "markdown"
+      ]
+    },
+    {
+      "title": "25 \u2014 Local Security Posture",
+      "file": "25 \u2014 Local Security Posture 209a4f113b7349f6b232346c5feb5589.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\25 \u2014 Local Security Posture 209a4f113b7349f6b232346c5feb5589.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "High",
+      "page_type": "Concept",
+      "local_agent_use": "Bounds for what the assistant should expose and to whom.",
+      "tags": [
+        "auth",
+        "network",
+        "secrets",
+        "security"
+      ]
+    },
+    {
+      "title": "26 \u2014 Secrets and Config Management",
+      "file": "26 \u2014 Secrets and Config Management ce3bbd39ae3e43ee8c0087f3e25edf23.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\26 \u2014 Secrets and Config Management ce3bbd39ae3e43ee8c0087f3e25edf23.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "Medium",
+      "page_type": "Implementation",
+      "local_agent_use": "Where keys live and how they get rotated.",
+      "tags": [
+        "config",
+        "env",
+        "rotation",
+        "secrets"
+      ]
+    },
+    {
+      "title": "27 \u2014 MVP Definition (v0.1)",
+      "file": "27 \u2014 MVP Definition (v0 1) f107f36a6ec14ac2967ba281b810d2f2.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\27 \u2014 MVP Definition (v0 1) f107f36a6ec14ac2967ba281b810d2f2.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "High",
+      "page_type": "Decision",
+      "local_agent_use": "Authoritative scope statement the librarian can reference for what is in/out.",
+      "tags": [
+        "milestones",
+        "mvp",
+        "scope",
+        "v0.1"
+      ]
+    },
+    {
+      "title": "28 \u2014 Glossary of Terms",
+      "file": "28 \u2014 Glossary of Terms e08a9e41eb3a4b60999fd8d909a75e00.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\28 \u2014 Glossary of Terms e08a9e41eb3a4b60999fd8d909a75e00.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "Medium",
+      "page_type": "Glossary",
+      "local_agent_use": "Canonical vocabulary for disambiguation when classifying queries.",
+      "tags": [
+        "definitions",
+        "glossary",
+        "vocabulary"
+      ]
+    },
+    {
+      "title": "29 \u2014 Experiments Log",
+      "file": "29 \u2014 Experiments Log bbc495182e874d3dabd6df38f9d9ecba.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\29 \u2014 Experiments Log bbc495182e874d3dabd6df38f9d9ecba.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "Medium",
+      "page_type": "Experiment",
+      "local_agent_use": "Source of empirical results that justify model and routing choices.",
+      "tags": [
+        "comparisons",
+        "evaluation",
+        "experiments",
+        "log"
+      ]
+    },
+    {
+      "title": "30 \u2014 Open Questions and Future Work",
+      "file": "30 \u2014 Open Questions and Future Work 17090eaad330485f830ff3b47efd7893.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library\\Offline Assistant Library Index\\30 \u2014 Open Questions and Future Work 17090eaad330485f830ff3b47efd7893.md",
+      "section": "Security / MVP / Glossary / Experiments",
+      "priority": "Low",
+      "page_type": "Reference",
+      "local_agent_use": "Backlog the librarian can surface when asked what is unresolved.",
+      "tags": [
+        "backlog",
+        "future",
+        "questions"
+      ]
+    },
+    {
+      "title": "Local Offline Assistant Learning Library",
+      "file": "Local Offline Assistant Learning Library 37ab75289cec4ab1a8c0b9ece50dc916.md",
+      "rel_path": "library\\notion_exports\\Private & Shared\\Local Offline Assistant Learning Library 37ab75289cec4ab1a8c0b9ece50dc916.md",
+      "section": "",
+      "priority": "",
+      "page_type": "",
+      "local_agent_use": "",
+      "tags": []
+    }
+  ]
 }

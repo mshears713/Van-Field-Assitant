@@ -23,8 +23,8 @@ def mock_ollama_success(monkeypatch):
         elapsed_ms=500,
     )
     mock = AsyncMock(return_value=success)
-    monkeypatch.setattr("backend.app.ollama_client.chat", mock)
-    monkeypatch.setattr("backend.app.agent_service.chat", mock)
+    monkeypatch.setattr("backend.app.agent_service.ollama_chat", mock)
+    monkeypatch.setattr("backend.app.agent_service.openai_chat", mock)
     return mock
 
 
@@ -41,8 +41,8 @@ def mock_ollama_unavailable(monkeypatch):
     check_mock = AsyncMock(return_value=False)
     chat_mock = AsyncMock(return_value=unavailable)
     monkeypatch.setattr("backend.app.ollama_client.check_availability", check_mock)
-    monkeypatch.setattr("backend.app.ollama_client.chat", chat_mock)
-    monkeypatch.setattr("backend.app.agent_service.chat", chat_mock)
+    monkeypatch.setattr("backend.app.agent_service.ollama_chat", chat_mock)
+    monkeypatch.setattr("backend.app.agent_service.openai_chat", chat_mock)
     return chat_mock
 
 
@@ -57,6 +57,6 @@ def mock_ollama_timeout(monkeypatch):
         error_type="timeout",
     )
     mock = AsyncMock(return_value=timeout_resp)
-    monkeypatch.setattr("backend.app.ollama_client.chat", mock)
-    monkeypatch.setattr("backend.app.agent_service.chat", mock)
+    monkeypatch.setattr("backend.app.agent_service.ollama_chat", mock)
+    monkeypatch.setattr("backend.app.agent_service.openai_chat", mock)
     return mock

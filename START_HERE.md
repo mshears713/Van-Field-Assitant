@@ -64,16 +64,20 @@ If pip is not found, try `python -m pip install -r backend/requirements.txt`.
 
 ---
 
-## Step 4: Pull the model
+## Step 4: Pull the models
 
-**Option A — pull over internet (preferred, requires temporary internet):**
+The assistant uses two models — one for general tasks, one for coding:
 
 ```
 [MINI PC — internet needed briefly]
+ollama pull qwen3:4b
 ollama pull qwen2.5-coder:3b
 ```
 
-If storage is tight or you want a smaller/faster model:
+- **qwen3:4b** — default model used by Operator, Librarian, Capture, and Display agents
+- **qwen2.5-coder:3b** — used exclusively by the Coder agent
+
+If storage is very tight, pull the smaller fallback instead:
 ```
 ollama pull qwen2.5-coder:1.5b
 ```
@@ -82,22 +86,22 @@ ollama pull qwen2.5-coder:1.5b
 
 ```
 [TRUSTED MACHINE]
-1. Download GGUF file for qwen2.5-coder from Hugging Face or Ollama model hub
+1. Download GGUF files from Hugging Face or Ollama model hub
    (no login required for public models)
-2. Copy the GGUF file to a USB drive
+2. Copy the GGUF files to a USB drive
 
 [COPY TO MINI PC]
-3. Copy GGUF file from USB to mini PC, e.g., C:\models\qwen2.5-coder-3b.gguf
+3. Copy GGUF files from USB to mini PC, e.g.:
+   C:\models\qwen3-4b.gguf
+   C:\models\qwen2.5-coder-3b.gguf
 
 [MINI PC]
-4. Create a Modelfile (plain text):
-   FROM C:\models\qwen2.5-coder-3b.gguf
+4. Create a Modelfile for each (plain text):
+   FROM C:\models\qwen3-4b.gguf
 
-5. Import:
-   ollama create qwen2.5-coder:3b -f Modelfile
-
-6. Set the fallback model env var if using a different name:
-   set FIELD_APP_MODEL=your-model-name
+5. Import each:
+   ollama create qwen3:4b -f Modelfile-qwen3
+   ollama create qwen2.5-coder:3b -f Modelfile-coder
 ```
 
 ---
@@ -197,7 +201,7 @@ If the response appears: setup is complete.
 |---------|-----------|
 | Backend won't start | Check Python version, check requirements installed, check port not in use |
 | Ollama shows Offline | Run `ollama serve` in a separate terminal |
-| Model missing | Run `ollama pull qwen2.5-coder:3b` |
+| Model missing | Run `ollama pull qwen3:4b` and `ollama pull qwen2.5-coder:3b` |
 | Android can't reach dashboard | Check same network, check Firewall (Step 8), check IP is correct |
 | Port already in use | Run `netstat -aon \| findstr 8080` to find what's using it |
 | Response is very slow | Try fallback: `set FIELD_APP_MODEL=qwen2.5-coder:1.5b` then restart backend |
@@ -218,10 +222,9 @@ See [DEBUGGING.md](DEBUGGING.md) for in-depth troubleshooting.
 [COPY TO MINI PC]
 4. Copy the extracted folder contents into: van-field-assitant/library/notion_exports/
    (via USB drive, LAN share, or git commit to public repo)
-
-[MINI PC — future]
-5. Run the index builder when available (coming soon)
-6. Use the Librarian Agent and paste relevant page content into the context box
 ```
+
+5. Open the dashboard → **Library** tab — pages are indexed automatically on first load.
+6. Go to **Agents → Librarian** and ask any question. Relevant pages are retrieved automatically — no manual paste needed.
 
 No Notion API key, no Notion login, no credentials stored on the mini PC.

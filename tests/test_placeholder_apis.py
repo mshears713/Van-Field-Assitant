@@ -22,9 +22,13 @@ def test_projects_endpoint(client):
 
 
 def test_library_endpoint(client):
-    data = _check_placeholder(client, "/api/library")
+    r = client.get("/api/library")
+    assert r.status_code == 200
+    data = r.json()
+    assert "ok" in data and data["ok"] is True
     assert "library_dir" in data
     assert "items" in data
+    assert isinstance(data["items"], list)
 
 
 def test_notes_endpoint(client):

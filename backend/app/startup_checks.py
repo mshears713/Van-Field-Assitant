@@ -39,24 +39,29 @@ async def run_startup_checks() -> dict:
 
     missing_agents = check_agent_files()
 
-    ollama_ok = await check_availability(config.OLLAMA_BASE_URL, config.OLLAMA_CHECK_TIMEOUT)
-    ollama_status = "available" if ollama_ok else "unavailable"
+    openai_mode = bool(config.OPENAI_API_KEY)
+
+    if openai_mode:
+        ollama_ok = False
+        backend_note = f"LLM backend: openai ({config.OPENAI_MODEL})"
+    else:
+        ollama_ok = await check_availability(config.OLLAMA_BASE_URL, config.OLLAMA_CHECK_TIMEOUT)
+        ollama_status = "available" if ollama_ok else "unavailable"
+        backend_note = f"Ollama: {ollama_status}. Model: {config.DEFAULT_MODEL}"
 
     if missing_agents:
         log_event(
             config.LOGS_DIR,
             "startup",
             "warn",
-            f"Backend started. Ollama: {ollama_status}. Model: {config.DEFAULT_MODEL}. "
-            f"Missing agent files: {missing_agents}",
+            f"Backend started. {backend_note}. Missing agent files: {missing_agents}",
         )
     else:
         log_event(
             config.LOGS_DIR,
             "startup",
             "ok",
-            f"Backend started. Ollama: {ollama_status}. Model: {config.DEFAULT_MODEL}. "
-            f"All agent files present.",
+            f"Backend started. {backend_note}. All agent files present.",
         )
 
     return {
